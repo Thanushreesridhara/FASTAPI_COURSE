@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from typing import Optional
+from pydantic import BaseModel
+
 
 app = FastAPI()
 
@@ -36,3 +38,15 @@ async def name_age_path(name: str,age: int) -> dict:
 @app.get('/hi')
 async def opt_name_path(name: Optional[str] = "User",age: int = 0) -> dict:
     return {"message": f"Hello i am {name} and i am {age} years old"}
+
+
+class BookCreateModel(BaseModel):
+    title : str
+    author : str
+
+@app.post('/create_book')
+async def create_book(book_data:BookCreateModel):
+    return{
+        "title" : book_data.title,
+        "author" : book_data.author
+    }
