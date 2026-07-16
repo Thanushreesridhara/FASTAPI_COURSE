@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from typing import Optional
 from pydantic import BaseModel
 
@@ -39,7 +39,7 @@ async def name_age_path(name: str,age: int) -> dict:
 async def opt_name_path(name: Optional[str] = "User",age: int = 0) -> dict:
     return {"message": f"Hello i am {name} and i am {age} years old"}
 
-
+#creating body along with pydantic model validation
 class BookCreateModel(BaseModel):
     title : str
     author : str
@@ -50,3 +50,22 @@ async def create_book(book_data:BookCreateModel):
         "title" : book_data.title,
         "author" : book_data.author
     }
+    
+@app.get('/get_headers')
+async def get_headers(
+    accept:str = Header(None),
+    content_type: str = Header(None),
+    user_agent:str = Header(None),
+    host:str = Header(None),
+    accept_encoding: str = Header(None),
+    server: str = Header(None)
+):
+    request_headers ={}
+    
+    request_headers["Accept"] = accept
+    request_headers["Content-type"] = content_type
+    request_headers["User-Agent"] = user_agent
+    request_headers["Host"] = host
+    request_headers["Accept-Encoding"]= accept_encoding
+    request_headers["server"]= server
+    return request_headers
