@@ -3,9 +3,9 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-app = FastAPI()
+app1 = FastAPI()
 
-@app.get('/')
+@app1.get('/')
 async def read_root():
     return {"message":"Hello World"}
 
@@ -14,7 +14,7 @@ async def read_root():
 # That means it must be passed like: /greet?name=thanu
 # instead of like a path param: /greet/thanu
 
-@app.get('/greet')
+@app1.get('/greet')
 async def greet_name(name: str) -> dict:
     return {"message": f"Hello {name}"}
 
@@ -22,20 +22,20 @@ async def greet_name(name: str) -> dict:
 # Compare this to a PATH parameter version below —
 # here {name} is explicitly part of the URL, so FastAPI expects it in the path itself.
 
-@app.get('/greet/{name}')
+@app1.get('/greet/{name}')
 async def greet_name_path(name: str) -> dict:
     return {"message": f"Hello {name}"}
 
 #demonstrating both path parameters and query parameters together
 
-@app.get('/hello/{name}')
+@app1.get('/hello/{name}')
 async def name_age_path(name: str,age: int) -> dict:
     return {"message": f"Hello i am {name} and i am {age} years old"}
 
 #demonstrating optional parameters
 # use & to provide two values like /hi?name=xxx&age=xx
 
-@app.get('/hi')
+@app1.get('/hi')
 async def opt_name_path(name: Optional[str] = "User",age: int = 0) -> dict:
     return {"message": f"Hello i am {name} and i am {age} years old"}
 
@@ -44,14 +44,14 @@ class BookCreateModel(BaseModel):
     title : str
     author : str
 
-@app.post('/create_book')
+@app1.post('/create_book')
 async def create_book(book_data:BookCreateModel):
     return{
         "title" : book_data.title,
         "author" : book_data.author
     }
     
-@app.get('/get_headers')
+@app1.get('/get_headers')
 async def get_headers(
     accept:str = Header(None),
     content_type: str = Header(None),
